@@ -1,7 +1,7 @@
 # Project Proposal 
 
 ## Description
-I have decdeid to make a puzzle sliding game for my major project. I made a sinple version of one puzzle for my 2d arrays assignment. To build on top of it, I am going to add more features to my game. 
+I have decided to make a puzzle sliding game for my major project. I made a sinple version of one puzzle for my 2d arrays assignment. To build on top of it, I am going to add more features to my game. 
 
 ## Need to Have List
 

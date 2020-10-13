@@ -11,7 +11,7 @@
 // to start the game press the "s" key
 
 const GRIDSIZE = 3;
-// let state = "title";
+let state = "titleScreen";
 let cellSize;
 let grid = [[1,2,3],
   [4,5,6],
@@ -19,6 +19,7 @@ let grid = [[1,2,3],
 let newGrid = [];
 let scenery, scenery1, scenery2, scenery3, scenery4, scenery5, scenery6, scenery7, scenery8, scenery9;
 let shouldMove = false;
+let moveCounter;
 
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
@@ -45,33 +46,36 @@ function setup() {
 } 
 
 function draw() {
-  displayGrid();
-  //switchScreens();
+  switchScreens();
 }
 
-//function switchScreens(){   // function I was working on but couldn't complete
-//   if (state === "title"){
-//     titlePage();
-//   }
-//   else if (state === "game" ){
-//     shuffleImage();
-//   }
-//   else if (state === "image"){
-//     imageMode (CENTER);
-//     image(scenery, 0, cellSize / 2, cellSize * 1.5, cellSize * 1.5);
-//     if (mousePressed){ // FIX 
-//       state = "game";
-//     }
-//   }
-// }
+function switchScreens(){ 
+  if (state === "titleScreen"){
+    titlePage();
+    if (keyPressed()){
+      state = "game";
+    }
+  }
+  else if (state === "game" ){
+    background(255);
+    text("moves:", windowWidth/2 + cellSize , windowHeight - cellSize * 2);
+    text(moveCounter, windowWidth/2 + cellSize * 1.5, windowHeight - cellSize * 2);
+    image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
+    displayGrid();
+  
+  }
+  // else if (state === "image"){
+  //   grid = shuffleImage();
+  //   background(255);
+  // }
+}
 
 function titlePage(){
   textSize(40);
   textAlign (CENTER, CENTER);
   text("Picture Sliding Puzzle Easy Mode", windowWidth / 2, windowHeight / 4);
-  text("Press the 's' key to shuffle", windowWidth / 2, windowHeight / 2);
-  // text("Press the 'i' key to see the final image", windowWidth / 2, windowHeight / 1.5);
-  // text("Press the 'i' key to see the final image", windowWidth / 2, windowHeight / 1.5);
+  text("Press the 's' key to start", windowWidth / 2, windowHeight / 2);
+  // text("Hint: Press the 'i' key to see the final image and moves counter", windowWidth / 2, windowHeight / 1.5);
 
 }
 
@@ -118,9 +122,9 @@ function strokeLines(){
   strokeWeight(3);
   stroke(255);
   line(0, 0, windowWidth/2 - cellSize*1.5 + 3*cellSize, 0);
-  line(0, cellSize, windowWidth/2 - cellSize*1.5 + 3*cellSize, cellSize);
-  line(0, 2*cellSize, windowWidth/2 - cellSize*1.5 + 3*cellSize, 2*cellSize);
-  line(0, 3*cellSize, windowWidth/2 - cellSize*1.5 + 3*cellSize, 3*cellSize);
+  line(0, cellSize, 3*cellSize, cellSize);
+  line(0, 2*cellSize, 3*cellSize, 2*cellSize);
+  line(0, 3*cellSize, 3*cellSize, 3*cellSize);
   line(0, 0, 0, 3*cellSize);
   line(cellSize, 0, cellSize, 3*cellSize);
   line(2*cellSize, 0, 2*cellSize, 3*cellSize);
@@ -130,6 +134,9 @@ function strokeLines(){
 function mousePressed(){
   let x = floor(mouseX / cellSize);
   let y = floor(mouseY / cellSize);
+
+  moveCounter += 1;
+  console.log(moveCounter);
   
   checkGrid(y, x);
 }
@@ -179,11 +186,12 @@ function shuffleImage(){
 function keyPressed(){
   // to start the game
   if (key === "s"){
-    //state = "game";
+    state = "game";
     grid = shuffleImage();
+    moveCounter = 0;
   }
-//   if (key === "i"){
-//     image(scenery, 0, 0, cellSize * 3, cellSize * 3);
-//     state = "image";
-//   }
+  // if (key === "i"){
+  //   image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
+  //   state = "image";
+  // }
 }
