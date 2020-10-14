@@ -21,4 +21,4 @@ I have decided to make a puzzle sliding game for my major project. I made a sinp
 - nice looking backgrounds
 - a give up option to skip to end screen
 - be able to choose the images for the puzzle  out of a selection of images
-- built in image cropper
+- scale to page

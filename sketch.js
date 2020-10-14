@@ -1,12 +1,8 @@
 // Final Project
 // April Lu
-// October 1st, 2020
+// October 14th, 2020
 
-// I will work on making this game have more features and look better for the final project. One thing that I did was crop pictures and assign them to each grid
-// and made sure they would move and change coordinates each time they were clicked. I also added a counter to count the number of clicks.
-// The commented out sections of code are the sections I'm working on for my Final project so please ignore those
-
-// to start the game press the "s" key
+// fix the check grid, bounce title?
 
 const GRIDSIZE = 3;
 let state = "titleScreen";
@@ -42,7 +38,7 @@ function preload(){
   scenery8 = loadImage("assets/scenery8.jpg");
   scenery9 = loadImage("assets/scenery9.jpg");
 
-  // river = loadImage("assets/river.jpg");
+  river = loadImage("assets/river.jpg");
   river1 = loadImage("assets/river1.jpg");
   river2 = loadImage("assets/river2.jpg");
   river3 = loadImage("assets/river3.jpg");
@@ -59,8 +55,6 @@ function preload(){
   river14 = loadImage("assets/river14.jpg");
   river15 = loadImage("assets/river15.jpg");
   river16 = loadImage("assets/river16.jpg");
-
-
 }
 
 function setup() {
@@ -96,17 +90,17 @@ function switchScreens(){
   }
   else if (state === "game" ){
     background(255);
+    fill(0);
     text("moves:", windowWidth/2 + cellSize , windowHeight - cellSize * 2);
     text(moveCounter, windowWidth/2 + cellSize * 1.5, windowHeight - cellSize * 2);
     image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
     displayGrid();
-  
   }
-
-  // else if (state === "game2"){
-  //   background(255);
-  //   displayGrid2();
-  // }
+  else if (state === "game2"){
+    background(255);
+    displayGrid2();
+    
+  }
   // else if (state === "image"){
   //   grid = shuffleImage();
   //   background(255);
@@ -114,11 +108,23 @@ function switchScreens(){
 }
 
 function titlePage(){
-  textSize(40);
+  background(160, 210, 243);
+  textFont("fantasy");
+  textSize(70);
+  fill(255);
   textAlign (CENTER, CENTER);
-  text("Picture Sliding Puzzle Easy Mode", windowWidth / 2, windowHeight / 4);
-  text("Press the 's' key to start", windowWidth / 2, windowHeight / 2);
+  text("PICTURE SLIDING PUZZLE", windowWidth / 2, windowHeight / 4);
+  
+  textSize(40);
+  textFont("cursive");
+  text("Press the 'e' key for Easy Mode", windowWidth / 2, windowHeight / 2);
+  text("Press the 'h' key for Hard Mode", windowWidth / 2, windowHeight / 1.7);
   // text("Hint: Press the 'i' key to see the final image and moves counter", windowWidth / 2, windowHeight / 1.5);
+}
+
+function endPage(){
+  text("You finally did it!", windowWidth / 2, windowHeight / 2);
+  text("You did it!", windowWidth / 2, windowHeight / 2);
 }
 
 function displayGrid(){
@@ -152,6 +158,7 @@ function displayGrid(){
         image(scenery8, x*cellSize, y*cellSize, cellSize, cellSize);
       }
       if (newGrid[y][x] === 9) {
+        fill(255);
         rect(x*cellSize, y*cellSize, cellSize, cellSize);
       }
     }
@@ -228,7 +235,7 @@ function shuffleImage(){
 
 function keyPressed(){
   // to start the game
-  if (key === "s"){
+  if (key === "e"){
     state = "game";
     grid = shuffleImage();
     moveCounter = 0;
