@@ -2,11 +2,9 @@
 // April Lu
 // October 1st, 2020
 
-
-// I couldnt figure out VSCode on my laptop so I wasn't able to finish what I wanted to get done for the weekend. However, I have all of the requirenments for 
-// the 2d arrays and will work on making this game have more features and look better for the final project. One thing that I did was crop pictures and assign them to each grid
-// and made sure they would move and change coordinates each time they were clicked. I'm still so sorry about the bad visual appeal and my non functioning state variables
-// but I was trying to work on that but had to delete it becuase I couldnt test it. 
+// I will work on making this game have more features and look better for the final project. One thing that I did was crop pictures and assign them to each grid
+// and made sure they would move and change coordinates each time they were clicked. I also added a counter to count the number of clicks.
+// The commented out sections of code are the sections I'm working on for my Final project so please ignore those
 
 // to start the game press the "s" key
 
@@ -36,7 +34,6 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
   if(width < height){
     cellSize = width/GRIDSIZE;
   }
@@ -76,7 +73,6 @@ function titlePage(){
   text("Picture Sliding Puzzle Easy Mode", windowWidth / 2, windowHeight / 4);
   text("Press the 's' key to start", windowWidth / 2, windowHeight / 2);
   // text("Hint: Press the 'i' key to see the final image and moves counter", windowWidth / 2, windowHeight / 1.5);
-
 }
 
 function displayGrid(){
@@ -136,7 +132,7 @@ function mousePressed(){
   let y = floor(mouseY / cellSize);
 
   moveCounter += 1;
-  console.log(moveCounter);
+  // console.log(moveCounter);
   
   checkGrid(y, x);
 }
