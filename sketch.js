@@ -5,6 +5,7 @@
 // fix the check grid, bounce title?
 
 const GRIDSIZE = 3;
+let lineY, lineX;
 let state = "titleScreen";
 let cellSize;
 let cellSize2;
@@ -15,6 +16,7 @@ let newGrid = [];
 let scenery, scenery1, scenery2, scenery3, scenery4, scenery5, scenery6, scenery7, scenery8, scenery9;
 
 const GRIDSIZE2 = 4;
+let lineY2, lineX2;
 let grid2 = [[1,2,3,4],
   [5, 6, 7, 8],
   [9, 10,  11, 12],
@@ -60,18 +62,23 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight);
   if(width < height){
-    cellSize = width/GRIDSIZE;
+    cellSize = width/GRIDSIZE - 50;
   }
   else{
-    cellSize = height/GRIDSIZE;
+    cellSize = height/GRIDSIZE - 50;
   }
 
   if(width < height){
-    cellSize2 = width/GRIDSIZE2;
+    cellSize2 = width/GRIDSIZE2 - 50;
   }
   else{
-    cellSize2 = height/GRIDSIZE2;
+    cellSize2 = height/GRIDSIZE2 - 50;
   }
+  lineY = windowHeight / 2 - cellSize * 1.5;
+  lineX = windowWidth / 2 - cellSize * 1.5;
+
+  lineY2 = windowHeight / 2 - cellSize2 * 2;
+  lineX2 = windowWidth /  2 -cellSize2 * 2;
 } 
 
 function draw() {
@@ -89,15 +96,18 @@ function switchScreens(){
     }
   }
   else if (state === "game" ){
-    background(255);
+    background(160, 210, 243);
     fill(0);
-    text("moves:", windowWidth/2 + cellSize , windowHeight - cellSize * 2);
-    text(moveCounter, windowWidth/2 + cellSize * 1.5, windowHeight - cellSize * 2);
+    text("moves:", windowWidth/2 - 40, windowHeight - 30);
+    text(moveCounter, windowWidth/2 + 40, windowHeight - 30);
     image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
     displayGrid();
   }
   else if (state === "game2"){
-    background(255);
+    background(160, 210, 243);
+    fill(0);
+    text("moves:", windowWidth/2 - 40, windowHeight - 30);
+    text(moveCounter, windowWidth/2 + 40, windowHeight - 30);
     displayGrid2();
     
   }
@@ -134,32 +144,32 @@ function displayGrid(){
       newGrid[y][x] = int(newGrid[y][x]);
     
       if (newGrid[y][x] === 1){
-        image(scenery1, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery1, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 2){
-        image(scenery2, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery2, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 3){
-        image(scenery3, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery3, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 4){
-        image(scenery4, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery4, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 5){
-        image(scenery5, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery5, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 6){
-        image(scenery6, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery6, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 7){
-        image(scenery7, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery7, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 8){
-        image(scenery8, x*cellSize, y*cellSize, cellSize, cellSize);
+        image(scenery8, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
       if (newGrid[y][x] === 9) {
         fill(255);
-        rect(x*cellSize, y*cellSize, cellSize, cellSize);
+        rect(x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
     }
   }
@@ -170,14 +180,17 @@ function strokeLines(){
   // drawing the stroke lines
   strokeWeight(3);
   stroke(255);
-  line(0, 0, windowWidth/2 - cellSize*1.5 + 3*cellSize, 0);
-  line(0, cellSize, 3*cellSize, cellSize);
-  line(0, 2*cellSize, 3*cellSize, 2*cellSize);
-  line(0, 3*cellSize, 3*cellSize, 3*cellSize);
-  line(0, 0, 0, 3*cellSize);
-  line(cellSize, 0, cellSize, 3*cellSize);
-  line(2*cellSize, 0, 2*cellSize, 3*cellSize);
-  line(3*cellSize, 0, 3*cellSize, 3*cellSize);
+  
+  line(lineX, cellSize + lineY, 3*cellSize + lineX, cellSize + lineY);
+  line(lineX, 2*cellSize + lineY, 3*cellSize + lineX, 2*cellSize + lineY);
+  line(cellSize + lineX, lineY, cellSize + lineX, 3*cellSize + lineY);
+  line(2*cellSize + lineX, lineY, 2*cellSize + lineX, 3*cellSize + lineY);
+
+  strokeWeight(6);
+  line(lineX, lineY, 3*cellSize + lineX, lineY);
+  line(lineX, lineY, lineX, 3*cellSize + lineY);
+  line(3*cellSize + lineX, lineY, 3*cellSize + lineX, 3*cellSize + lineY);
+  line(lineX, 3*cellSize + lineY, 3*cellSize + lineX, 3*cellSize + lineY);
 }
 
 function mousePressed(){
@@ -259,53 +272,54 @@ function displayGrid2(){
       newGrid2[y][x] = int(newGrid2[y][x]);
     
       if (newGrid2[y][x] === 1){
-        image(river1, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river1, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 2){
-        image(river2, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river2, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 3){
-        image(river3, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river3, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 4){
-        image(river4, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river4, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 5){
-        image(river5, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river5, x*cellSize2 + lineX2, y*cellSize2  + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 6){
-        image(river6, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river6, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 7){
-        image(river7, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river7, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 8){
-        image(river8, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river8, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 9){
-        image(river9, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river9, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 10){
-        image(river10, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river10, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 11){
-        image(river11, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river11, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 12){
-        image(river12, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river12, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 13){
-        image(river13, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river13, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 14){
-        image(river14, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river14, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
       if (newGrid2[y][x] === 15){
-        image(river15, x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        image(river15, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
 
       if (newGrid2[y][x] === 16) {
-        rect(x*cellSize2, y*cellSize2, cellSize2, cellSize2);
+        fill(255);
+        rect(x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
     }
   }
@@ -316,17 +330,20 @@ function strokeLines2(){
   // drawing the stroke lines
   strokeWeight(3);
   stroke(255);
-  line(0, 0, windowWidth/2 - cellSize2*1.5 + 3*cellSize2, 0);
-  line(0, cellSize2, 4*cellSize2, cellSize2);
-  line(0, 2*cellSize2, 4*cellSize2, 2*cellSize2);
-  line(0, 3*cellSize2, 4*cellSize2, 3*cellSize2);
-  line(0, 4*cellSize2, 4*cellSize2, 4*cellSize2);
+  
+  line(lineX2, cellSize2 + lineY2, 4*cellSize2 + lineX2, cellSize2 + lineY2);
+  line(lineX2, 2*cellSize2 + lineY2, 4*cellSize2 + lineX2, 2*cellSize2 + lineY2);
+  line(lineX2, 3*cellSize2 + lineY2, 4*cellSize2 + lineX2, 3*cellSize2 + lineY2);
+  line(cellSize2 + lineX2, lineY2, cellSize2 + lineX2, 4*cellSize2 + lineY2);
+  line(2*cellSize2 + lineX2, lineY2, 2*cellSize2 + lineX2, 4*cellSize2 + lineY2);
+  line(3*cellSize2 + lineX2, lineY2, 3*cellSize2 +lineX2, 4*cellSize2 + lineY2);
+  
 
-  line(0, 0, 0, 3*cellSize2);
-  line(cellSize2, 0, cellSize2, 4*cellSize2);
-  line(2*cellSize2, 0, 2*cellSize2, 4*cellSize2);
-  line(3*cellSize2, 0, 3*cellSize2, 4*cellSize2);
-  line(4*cellSize2, 0, 4*cellSize2, 4*cellSize2);
+  strokeWeight(6);
+  line(lineX2, lineY2, lineX2, 4*cellSize2 + lineY2);
+  line(4*cellSize2 + lineX2, lineY2, 4*cellSize2 + lineX2, 4*cellSize2 + lineY2);
+  line(lineX2, lineY2, 4*cellSize2 +lineX2, lineY2);
+  line(lineX2, 4*cellSize2 + lineY2, 4*cellSize2 +lineX2, 4*cellSize2 + lineY2);
 }
 
 function checkGrid2(y, x){
