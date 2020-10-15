@@ -98,16 +98,16 @@ function switchScreens(){
   else if (state === "game" ){
     background(160, 210, 243);
     fill(0);
-    text("moves:", windowWidth/2 - 40, windowHeight - 30);
-    text(moveCounter, windowWidth/2 + 40, windowHeight - 30);
+    text("moves:", windowWidth/2 - 50, windowHeight - 30);
+    text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
     image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
     displayGrid();
   }
   else if (state === "game2"){
     background(160, 210, 243);
     fill(0);
-    text("moves:", windowWidth/2 - 40, windowHeight - 30);
-    text(moveCounter, windowWidth/2 + 40, windowHeight - 30);
+    text("moves:", windowWidth/2 - 50, windowHeight - 30);
+    text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
     displayGrid2();
     
   }
@@ -197,7 +197,9 @@ function mousePressed(){
   let x = floor(mouseX / cellSize);
   let y = floor(mouseY / cellSize);
 
-  moveCounter += 1;
+  if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
+    moveCounter += 1;
+  }
   // console.log(moveCounter);
   
   checkGrid2(y,x);
