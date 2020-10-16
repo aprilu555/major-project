@@ -91,8 +91,15 @@ function draw() {
 function switchScreens(){ 
   if (state === "titleScreen"){
     titlePage();
-    if (keyPressed()){
+    if (key === "e"){
       state = "game";
+      grid = shuffleImage();
+      moveCounter = 0;
+    }
+    if (key === "h"){
+      state = "game2";
+      grid = shuffleImage2();
+      moveCounter = 0;
     }
   }
   else if (state === "game" ){
@@ -100,21 +107,44 @@ function switchScreens(){
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
-    image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
     displayGrid();
+
+    if (key === "i"){
+      state = "image";
+    }
   }
+
   else if (state === "game2"){
     background(160, 210, 243);
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
     displayGrid2();
+
+    if (key === "i"){
+      state = "image2";
+    }
     
   }
-  // else if (state === "image"){
-  //   grid = shuffleImage();
-  //   background(255);
-  // }
+  else if (state === "image"){
+    background(160, 210, 243);
+    imageMode(CENTER,CENTER);
+    image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
+
+    if (key === "e"){
+      state === "game";
+    }
+  }
+
+  else if (state === "image2"){
+    background(160, 210, 243);
+    imageMode(CENTER,CENTER);
+    image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
+
+    if (key === "h"){
+      state === "game2";
+    }
+  }
 }
 
 function titlePage(){
@@ -194,20 +224,26 @@ function strokeLines(){
 }
 
 function mousePressed(){
-  let x = floor(mouseX / cellSize);
-  let y = floor(mouseY / cellSize);
+  if (state === "game"){
+    let x = floor(mouseX/cellSize -  lineX/cellSize);
+    let y = floor(mouseY/cellSize - lineY/cellSize);
+    checkGrid(y, x);
+  }
+
+  else if (state === "game2"){
+    let x = floor(mouseX/cellSize2 -  lineX2/cellSize2);
+    let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
+    checkGrid2(y, x);
+    console.log(y,x);
+  }
 
   if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
     moveCounter += 1;
   }
-  // console.log(moveCounter);
-  
-  checkGrid2(y,x);
-  checkGrid(y, x);
 }
 
 function checkGrid(y, x){
-  if (y+1 < GRIDSIZE && x < GRIDSIZE&& newGrid[y + 1][x] === 9){
+  if (y+1 < GRIDSIZE && x < GRIDSIZE && newGrid[y + 1][x] === 9){
     // to check if it should move down
     
     newGrid[y + 1][x] = newGrid[y][x];
@@ -247,25 +283,6 @@ function shuffleImage(){
   }
   displayGrid();
 }
-
-function keyPressed(){
-  // to start the game
-  if (key === "e"){
-    state = "game";
-    grid = shuffleImage();
-    moveCounter = 0;
-  }
-  if (key === "h"){
-    state = "game2";
-    grid = shuffleImage2();
-    moveCounter = 0;
-  }
-  // if (key === "i"){
-  //   image(scenery, windowWidth/2 + cellSize , windowHeight - cellSize * 1.5, cellSize *1.5, cellSize * 1.5);
-  //   state = "image";
-  // }
-}
-
 
 function displayGrid2(){
   // assigning each image to a grid
@@ -339,7 +356,6 @@ function strokeLines2(){
   line(cellSize2 + lineX2, lineY2, cellSize2 + lineX2, 4*cellSize2 + lineY2);
   line(2*cellSize2 + lineX2, lineY2, 2*cellSize2 + lineX2, 4*cellSize2 + lineY2);
   line(3*cellSize2 + lineX2, lineY2, 3*cellSize2 +lineX2, 4*cellSize2 + lineY2);
-  
 
   strokeWeight(6);
   line(lineX2, lineY2, lineX2, 4*cellSize2 + lineY2);
@@ -367,7 +383,7 @@ function checkGrid2(y, x){
     // to check if it should move left
     
     newGrid2[y][x - 1] = newGrid2[y][x];
-    newGrid2[y][x] = 9;
+    newGrid2[y][x] = 16;
     displayGrid2();
   }
   if (y-1 >= 0 && x >= 0 && newGrid2 [y - 1][x] === 16){

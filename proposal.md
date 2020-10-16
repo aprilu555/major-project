@@ -12,13 +12,13 @@ I have decided to make a puzzle sliding game for my major project. I made a sinp
 - a title screen to give instructions 
 - an end screen for when the puzzle is completed
 - a counter to count the number of moves taken
-- a timer to time the amount of time taken to complete the puzzle
 
 ## Nice to Have List
 
+- fix the impossible shuffles
+- a timer to time the amount of time taken to complete the puzzle
 - center the grids 
 - sound effects
 - nice looking backgrounds
-- a give up option to skip to end screen
 - be able to choose the images for the puzzle  out of a selection of images
 - scale to page
