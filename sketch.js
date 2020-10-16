@@ -83,8 +83,6 @@ function setup() {
 
 function draw() {
   titlePage();
-  // grid2 = shuffleImage2();
-  // displayGrid2();
   switchScreens();
 }
 
@@ -124,15 +122,14 @@ function switchScreens(){
     if (key === "i"){
       state = "image2";
     }
-    
   }
+
   else if (state === "image"){
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
-
     if (key === "e"){
-      state === "game";
+      state = "game";
     }
   }
 
@@ -140,9 +137,9 @@ function switchScreens(){
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
-
     if (key === "h"){
-      state === "game2";
+      grid2 = shuffleImage2();
+      state = "game2";
     }
   }
 }
