@@ -15,10 +15,11 @@ I have decided to make a puzzle sliding game for my major project. I made a sinp
 
 ## Nice to Have List
 
-- fix the impossible shuffles
+- fix the impossible shuffles*
+- keep track of high scores
 - a timer to time the amount of time taken to complete the puzzle
-- center the grids 
-- sound effects
+- center the grids
+- sound effects*
 - nice looking backgrounds
 - be able to choose the images for the puzzle  out of a selection of images
 - scale to page

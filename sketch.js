@@ -28,6 +28,9 @@ let river, river1, river2, river3, river4, river5, river6, river7, river8, river
 let shouldMove = false;
 let moveCounter;
 
+let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
+let shuffle6, shuffle7, shuffle8;
+
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
   scenery1 = loadImage("assets/scenery1.jpg");
@@ -57,6 +60,17 @@ function preload(){
   river14 = loadImage("assets/river14.jpg");
   river15 = loadImage("assets/river15.jpg");
   river16 = loadImage("assets/river16.jpg");
+
+  shuffle1 = loadStrings("assets/1.txt"); 
+  shuffle2 = loadStrings("assets/2.txt");
+  shuffle3 = loadStrings("assets/3.txt"); 
+  shuffle4 = loadStrings("assets/4.txt");
+  shuffle5 = loadStrings("assets/5.txt");
+
+  shuffle6 = loadStrings("assets/6.txt");
+  shuffle7 = loadStrings("assets/7.txt");
+  shuffle8 = loadStrings("assets/8.txt");
+
 }
 
 function setup() {
@@ -79,6 +93,20 @@ function setup() {
 
   lineY2 = windowHeight / 2 - cellSize2 * 2;
   lineX2 = windowWidth /  2 -cellSize2 * 2;
+
+  for (let i = 0; i < shuffle1.length; i++){
+    shuffle1[i] = shuffle1[i].split(".");
+    shuffle2[i] = shuffle2[i].split(".");
+    shuffle3[i] = shuffle3[i].split(".");
+    shuffle4[i] = shuffle4[i].split(".");
+    shuffle5[i] = shuffle5[i].split(".");
+  }
+
+  for (let y = 0; y < GRIDSIZE; y++){
+    for (let x = 0; x < GRIDSIZE; x++){
+      shuffle1[y][x] = int(shuffle1[y][x]);
+    }
+  }
 } 
 
 function draw() {
@@ -128,6 +156,8 @@ function switchScreens(){
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
+    fill(0);
+    text("press 'e' to return to game", windowWidth / 2, windowHeight / 2 + 300);
     if (key === "e"){
       state = "game";
     }
@@ -137,8 +167,9 @@ function switchScreens(){
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
+    fill(0);
+    text("press 'h' to return to game", windowWidth / 2, windowHeight / 2 + 300);
     if (key === "h"){
-      grid2 = shuffleImage2();
       state = "game2";
     }
   }
@@ -156,7 +187,9 @@ function titlePage(){
   textFont("cursive");
   text("Press the 'e' key for Easy Mode", windowWidth / 2, windowHeight / 2);
   text("Press the 'h' key for Hard Mode", windowWidth / 2, windowHeight / 1.7);
-  // text("Hint: Press the 'i' key to see the final image and moves counter", windowWidth / 2, windowHeight / 1.5);
+  textSize(20);
+  text("In this game you will try to solve a puzzle, just click on the puzzle pieces beside the white square to move, in the end, the white square should be in the bottom right corner", windowWidth / 4, windowHeight / 2, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
+  textSize(40);
 }
 
 function endPage(){
@@ -169,7 +202,8 @@ function displayGrid(){
   for (let y = 0; y < GRIDSIZE; y++){
     for (let x = 0; x < GRIDSIZE; x++){
       newGrid[y][x] = int(newGrid[y][x]);
-    
+      
+      imageMode(CORNER);
       if (newGrid[y][x] === 1){
         image(scenery1, x*cellSize + lineX, y*cellSize + lineY, cellSize, cellSize);
       }
@@ -275,8 +309,11 @@ function checkGrid(y, x){
 
 function shuffleImage(){
   // to randomize the grid (easy mode)
-  for (let x = 0; x < GRIDSIZE; x++){
-    newGrid [x] = shuffle(grid[x]);
+  for (let y = 0; y < GRIDSIZE; y++){
+    for (let x = 0; x < GRIDSIZE; x++){
+      //newGrid[y][x] = random(shuffle1[y][x], shuffle2[y][x], shuffle3[y][x], shuffle4[y][x], shuffle5[y][x]);
+      newGrid[y][x] = shuffle1[y][x];
+    }
   }
   displayGrid();
 }
@@ -286,7 +323,8 @@ function displayGrid2(){
   for (let y = 0; y < GRIDSIZE2; y++){
     for (let x = 0; x < GRIDSIZE2; x++){
       newGrid2[y][x] = int(newGrid2[y][x]);
-    
+      
+      imageMode(CORNER);
       if (newGrid2[y][x] === 1){
         image(river1, x*cellSize2 + lineX2, y*cellSize2 + lineY2, cellSize2, cellSize2);
       }
