@@ -2,7 +2,8 @@
 // April Lu
 // October 14th, 2020
 
-// fix the check grid, bounce title?
+// Wed: add end page (+ restart button), add sound?
+// Thurs: add high score tracker, make code look nice + add comments
 
 const GRIDSIZE = 3;
 let lineY, lineX;
@@ -30,6 +31,8 @@ let moveCounter;
 
 let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
+
+let clickSound;
 
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
@@ -71,6 +74,8 @@ function preload(){
   shuffle7 = loadStrings("assets/7.txt");
   shuffle8 = loadStrings("assets/8.txt");
 
+  soundFormats("wav");
+  clickSound = loadSound("clickSound.wav");
 }
 
 function setup() {
@@ -95,40 +100,61 @@ function setup() {
   lineX2 = windowWidth /  2 -cellSize2 * 2;
 
   for (let i = 0; i < shuffle1.length; i++){
-    shuffle1[i] = shuffle1[i].split(".");
-    shuffle2[i] = shuffle2[i].split(".");
-    shuffle3[i] = shuffle3[i].split(".");
-    shuffle4[i] = shuffle4[i].split(".");
-    shuffle5[i] = shuffle5[i].split(".");
+    shuffle1[i] = shuffle1[i].split(",");
+    shuffle2[i] = shuffle2[i].split(",");
+    shuffle3[i] = shuffle3[i].split(",");
+    shuffle4[i] = shuffle4[i].split(",");
+    shuffle5[i] = shuffle5[i].split(",");
+  }
+  for (let i = 0; i < shuffle6.length; i++){
+    shuffle6[i] = shuffle6[i].split(",");
+    shuffle7[i] = shuffle7[i].split(",");
+    shuffle8[i] = shuffle8[i].split(",");
   }
 
+  
   for (let y = 0; y < GRIDSIZE; y++){
     for (let x = 0; x < GRIDSIZE; x++){
       shuffle1[y][x] = int(shuffle1[y][x]);
+      shuffle2[y][x] = int(shuffle2[y][x]);
+      shuffle3[y][x] = int(shuffle3[y][x]);
+      shuffle4[y][x] = int(shuffle4[y][x]);
+      shuffle5[y][x] = int(shuffle5[y][x]);
     }
   }
+  for (let y = 0; y < GRIDSIZE2; y++){
+    for (let x = 0; x < GRIDSIZE2; x++){
+      shuffle6[y][x] = int(shuffle6[y][x]);
+      shuffle7[y][x] = int(shuffle7[y][x]);
+      shuffle8[y][x] = int(shuffle8[y][x]);
+    }
+  }
+
 } 
 
 function draw() {
   titlePage();
   switchScreens();
+  winGame();
 }
 
 function switchScreens(){ 
   if (state === "titleScreen"){
+    // first sceen of the game, gives instructions
     titlePage();
     if (key === "e"){
       state = "game";
-      grid = shuffleImage();
+      shuffleImage();
       moveCounter = 0;
     }
     if (key === "h"){
       state = "game2";
-      grid = shuffleImage2();
+      shuffleImage2();
       moveCounter = 0;
     }
   }
   else if (state === "game" ){
+    // the 3x3 grid game
     background(160, 210, 243);
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
@@ -141,6 +167,7 @@ function switchScreens(){
   }
 
   else if (state === "game2"){
+    // the 4x4 grid game
     background(160, 210, 243);
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
@@ -153,6 +180,7 @@ function switchScreens(){
   }
 
   else if (state === "image"){
+    // reference image for the 3x3 grid
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
@@ -164,6 +192,7 @@ function switchScreens(){
   }
 
   else if (state === "image2"){
+    // referencec image for the 4x4 grid
     background(160, 210, 243);
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
@@ -172,6 +201,10 @@ function switchScreens(){
     if (key === "h"){
       state = "game2";
     }
+  }
+  else if (state === "endPage"){
+    // final page of the game after the puzzle has been completed, give an option to restart
+    endPage();
   }
 }
 
@@ -259,6 +292,7 @@ function mousePressed(){
     let x = floor(mouseX/cellSize -  lineX/cellSize);
     let y = floor(mouseY/cellSize - lineY/cellSize);
     checkGrid(y, x);
+    // clickSound.play();
   }
 
   else if (state === "game2"){
@@ -266,6 +300,7 @@ function mousePressed(){
     let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
     checkGrid2(y, x);
     console.log(y,x);
+    // clickSound.play();
   }
 
   if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
@@ -302,21 +337,19 @@ function checkGrid(y, x){
     newGrid[y][x] = 9;
     displayGrid();
   } 
-  if (newGrid === grid){
-    image(scenery9, windowWidth/2 - cellSize*1.5 + cellSize*2, cellSize*2, cellSize, cellSize);
-  }
 }
 
 function shuffleImage(){
   // to randomize the grid (easy mode)
   for (let y = 0; y < GRIDSIZE; y++){
     for (let x = 0; x < GRIDSIZE; x++){
-      //newGrid[y][x] = random(shuffle1[y][x], shuffle2[y][x], shuffle3[y][x], shuffle4[y][x], shuffle5[y][x]);
-      newGrid[y][x] = shuffle1[y][x];
+      newGrid = random([shuffle1, shuffle2, shuffle3, shuffle4, shuffle5]);
     }
   }
   displayGrid();
 }
+
+// Beginning of hard mode code
 
 function displayGrid2(){
   // assigning each image to a grid
@@ -435,8 +468,19 @@ function checkGrid2(y, x){
 
 function shuffleImage2(){
   // to randomize the grid (easy mode)
-  for (let x = 0; x < GRIDSIZE2; x++){
-    newGrid2[x] = shuffle(grid2[x]);
+  for (let y = 0; y < GRIDSIZE2; y ++){
+    for (let x = 0; x < GRIDSIZE2; x++){
+      newGrid2 = random([shuffle6, shuffle7, shuffle8]);
+    }
   }
   displayGrid2();
+}
+
+function winGame(){
+  // to check if the puzzle is completed or not
+  if (newGrid === grid){
+    image(scenery9, windowWidth/2 - cellSize*1.5 + cellSize*2, cellSize*2, cellSize, cellSize);
+    state === "endPage";
+    return true;
+  }
 }

@@ -10,13 +10,13 @@ I have decided to make a puzzle sliding game for my major project. I made a sinp
     - be able to click on each image and check if it should move or not
 - a buttton to look at the final image in the middle of the game
 - a title screen to give instructions 
-- an end screen for when the puzzle is completed
+- an end screen for when the puzzle is completed*
 - a counter to count the number of moves taken
 
 ## Nice to Have List
 
-- fix the impossible shuffles*
-- keep track of high scores
+- fix the impossible shuffles
+- keep track of high scores*
 - a timer to time the amount of time taken to complete the puzzle
 - center the grids
 - sound effects*
