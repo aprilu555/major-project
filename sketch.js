@@ -28,11 +28,14 @@ let river, river1, river2, river3, river4, river5, river6, river7, river8, river
 
 let shouldMove = false;
 let moveCounter;
+//let highScore = 0;
 
 let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
 
 let clickSound;
+
+let hasWon = false;
 
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
@@ -129,13 +132,14 @@ function setup() {
       shuffle8[y][x] = int(shuffle8[y][x]);
     }
   }
+  // highScore = getItem("minClicks");
 
 } 
 
 function draw() {
   titlePage();
   switchScreens();
-  winGame();
+  
 }
 
 function switchScreens(){ 
@@ -159,7 +163,9 @@ function switchScreens(){
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
+    // text(highScore, windowWidth/2 + 150, windowHeight - 30);
     displayGrid();
+    arraysEqual();
 
     if (key === "i"){
       state = "image";
@@ -299,17 +305,20 @@ function mousePressed(){
     let x = floor(mouseX/cellSize2 -  lineX2/cellSize2);
     let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
     checkGrid2(y, x);
-    console.log(y,x);
+    // console.log(y,x);
     // clickSound.play();
   }
 
   if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
     moveCounter += 1;
+    // if (moveCounter < highScore){
+    //   storeItem("minClicks", moveCounter);
+    // }
   }
 }
 
 function checkGrid(y, x){
-  if (y+1 < GRIDSIZE && x < GRIDSIZE && newGrid[y + 1][x] === 9){
+  if (y+1 < GRIDSIZE && x < GRIDSIZE && newGrid[y + 1][x] === 9 ){
     // to check if it should move down
     
     newGrid[y + 1][x] = newGrid[y][x];
@@ -329,6 +338,7 @@ function checkGrid(y, x){
     newGrid[y][x - 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
+   
   }
   if (y-1 >= 0 && x >= 0 && newGrid [y - 1][x] === 9){
     // to check if it should move up
@@ -336,7 +346,12 @@ function checkGrid(y, x){
     newGrid[y - 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
+    
   } 
+  if (newGrid === grid){
+    newGrid = grid;
+    state = "endPage";
+  }
 }
 
 function shuffleImage(){
@@ -461,9 +476,6 @@ function checkGrid2(y, x){
     newGrid2[y][x] = 16;
     displayGrid2();
   } 
-  if (newGrid2 === grid2){
-    image(scenery9, windowWidth/2 - cellSize*1.5 + cellSize*2, cellSize*2, cellSize, cellSize);
-  }
 }
 
 function shuffleImage2(){
@@ -476,11 +488,17 @@ function shuffleImage2(){
   displayGrid2();
 }
 
-function winGame(){
+function arraysEqual(){
   // to check if the puzzle is completed or not
-  if (newGrid === grid){
-    image(scenery9, windowWidth/2 - cellSize*1.5 + cellSize*2, cellSize*2, cellSize, cellSize);
-    state === "endPage";
-    return true;
+  for (let y = 0; y < GRIDSIZE; y++){
+    if (newGrid[y] !== grid[y]){
+      hasWon =  false;
+    }
+    for (let x = 0; x < GRIDSIZE; x++){
+      if (newGrid[x] !== grid[x]){
+        hasWon = false;
+      }
+    }
   }
+  hasWon = true;
 }
