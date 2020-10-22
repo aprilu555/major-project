@@ -2,8 +2,7 @@
 // April Lu
 // October 14th, 2020
 
-// Wed: add end page (+ restart button), add sound?
-// Thurs: add high score tracker, make code look nice + add comments
+// try to add sound? add comments
 
 const GRIDSIZE = 3;
 let lineY, lineX;
@@ -28,14 +27,13 @@ let river, river1, river2, river3, river4, river5, river6, river7, river8, river
 
 let shouldMove = false;
 let moveCounter;
-//let highScore = 0;
 
 let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
 
-let clickSound;
+let clickSound; // ADD?!?!
 
-let confetti;
+let confetti, mandala, mandala2, mandala3, mandala4, mandala5, mandala6;
 
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
@@ -68,13 +66,21 @@ function preload(){
   river16 = loadImage("assets/river16.jpg");
 
   confetti = loadImage("assets/confetti.png");
+  mandala = loadImage("assets/mandala.png");
+  mandala2 = loadImage("assets/mandala2.png");
+  mandala3 = loadImage("assets/mandala3.png");
+  mandala4 = loadImage("assets/mandala4.png");
+  mandala5 = loadImage("assets/mandala5.png");
+  mandala6 = loadImage("assets/mandala6.png");
 
+  // text files for the 3x3 grid  
   shuffle1 = loadStrings("assets/1.txt"); 
   shuffle2 = loadStrings("assets/2.txt");
   shuffle3 = loadStrings("assets/3.txt"); 
   shuffle4 = loadStrings("assets/4.txt");
   shuffle5 = loadStrings("assets/5.txt");
 
+  // text files for the 4x4 grid
   shuffle6 = loadStrings("assets/6.txt");
   shuffle7 = loadStrings("assets/7.txt");
   shuffle8 = loadStrings("assets/8.txt");
@@ -117,7 +123,6 @@ function setup() {
     shuffle7[i] = shuffle7[i].split(",");
     shuffle8[i] = shuffle8[i].split(",");
   }
-
   
   for (let y = 0; y < GRIDSIZE; y++){
     for (let x = 0; x < GRIDSIZE; x++){
@@ -135,12 +140,9 @@ function setup() {
       shuffle8[y][x] = int(shuffle8[y][x]);
     }
   }
-  // highScore = getItem("minClicks");
-
 } 
 
 function draw() {
-  titlePage();
   switchScreens();
 }
 
@@ -162,15 +164,17 @@ function switchScreens(){
   else if (state === "game" ){
     // the 3x3 grid game
     background(160, 210, 243);
+    tint(255, 200);
+    image(mandala3, 0, 0);
+    image(mandala4, windowWidth - mandala4.width, 0);
+    tint(255, 255);
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
-    // text(highScore, windowWidth/2 + 150, windowHeight - 30);
     displayGrid();
     if (arraysEqual(newGrid, grid) === true){
       state = "endPage";
     }
-
     if (key === "i"){
       state = "image";
     }
@@ -179,11 +183,17 @@ function switchScreens(){
   else if (state === "game2"){
     // the 4x4 grid game
     background(160, 210, 243);
+    tint(255, 200);
+    image(mandala5, 0, 0);
+    image(mandala6, windowWidth - mandala6.width, 0);
+    tint(255, 255);
     fill(0);
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
     displayGrid2();
-
+    if (arraysEqual2(newGrid2, grid2) === true){
+      state = "endPage";
+    }
     if (key === "i"){
       state = "image2";
     }
@@ -192,6 +202,11 @@ function switchScreens(){
   else if (state === "image"){
     // reference image for the 3x3 grid
     background(160, 210, 243);
+    imageMode(CORNER);
+    tint(255, 200);
+    image(mandala3, 0, 0);
+    image(mandala4, windowWidth - mandala4.width, 0);
+    tint(255, 255);
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
     fill(0);
@@ -204,6 +219,11 @@ function switchScreens(){
   else if (state === "image2"){
     // referencec image for the 4x4 grid
     background(160, 210, 243);
+    imageMode(CORNER);
+    tint(255, 200);
+    image(mandala5, 0, 0);
+    image(mandala6, windowWidth - mandala6.width, 0);
+    tint(255, 255);
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
     fill(0);
@@ -212,14 +232,23 @@ function switchScreens(){
       state = "game2";
     }
   }
+
   else if (state === "endPage"){
     // final page of the game after the puzzle has been completed, give an option to restart
     endPage();
+    if (key === "r"){
+      state = "titleScreen";
+    }
   }
 }
 
 function titlePage(){
   background(160, 210, 243);
+  imageMode(CORNER);
+  tint(255, 200);
+  image(mandala, 0, 0);
+  image(mandala2, windowWidth - mandala2.width, 0);
+  tint(255, 255);
   textFont("fantasy");
   textSize(70);
   fill(255);
@@ -232,18 +261,26 @@ function titlePage(){
   text("Press the 'h' key for Hard Mode", windowWidth / 2, windowHeight / 1.7);
   textSize(20);
   text("In this game you will try to solve a puzzle, just click on the puzzle pieces beside the white square to move, in the end, the white square should be in the bottom right corner", windowWidth / 4, windowHeight / 2, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
+  textSize(30);
+  text("Hint: press 'i' in the middle of the game for help", windowWidth / 4, windowHeight / 2 + 50, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
   textSize(40);
 }
 
 function endPage(){
   background(160, 210, 243);
+  tint(255, 200);
+  image(mandala, 0, 0);
+  image(mandala2, windowWidth - mandala2.width, 0);
+  tint(255, 255);
+  imageMode(CENTER, CENTER);
+  image(confetti, windowWidth / 2 - 300, windowHeight / 4, confetti.width * 0.5, confetti.height * 0.5);
+  image(confetti, windowWidth / 2 + 300, windowHeight / 4, confetti.width * 0.5, confetti.height * 0.5);
   noStroke();
   text("You did it!", windowWidth / 2, windowHeight / 2);
+  text ("press 'r' to return to home page", windowWidth/2, windowHeight/ 2 - 100);
   textSize(70);
   textFont("fantasy");
   text ("CONGRATS!", windowWidth / 2, windowHeight / 4);
-  image(confetti, 0, 0, windowWidth, windowHeight);
-  
 }
 
 function displayGrid(){
@@ -315,49 +352,43 @@ function mousePressed(){
     let x = floor(mouseX/cellSize2 -  lineX2/cellSize2);
     let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
     checkGrid2(y, x);
-    // console.log(y,x);
     // clickSound.play();
   }
 
   if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
     moveCounter += 1;
-    // if (moveCounter < highScore){
-    //   storeItem("minClicks", moveCounter);
-    // }
   }
 }
 
 function checkGrid(y, x){
   if (y+1 < GRIDSIZE && x < GRIDSIZE && newGrid[y + 1][x] === 9 ){
     // to check if it should move down
-    
     newGrid[y + 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
-    displayGrid();
+    displayGrid(); //DO I NEED THIS?!?!!?
   }
+
   if (x+1 < GRIDSIZE && y < GRIDSIZE && newGrid [y][x + 1] === 9){
     // to check if it should move right
-    
     newGrid [y][x + 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
   }
+
   if (x-1 >= 0 && y >= 0 && newGrid [y][x - 1] === 9){
     // to check if it should move left
-    
     newGrid[y][x - 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
-   
   }
+
   if (y-1 >= 0 && x >= 0 && newGrid [y - 1][x] === 9){
     // to check if it should move up
-    
     newGrid[y - 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
-    
   } 
+
   if (newGrid === grid){
     newGrid = grid;
     state = "endPage";
@@ -374,8 +405,20 @@ function shuffleImage(){
   displayGrid();
 }
 
-// Beginning of hard mode code
+function arraysEqual(newGrid, grid){
+  // to check if the puzzle is completed or not
+  for (let y = 0; y < GRIDSIZE; y++){
+    for (let x = 0; x < GRIDSIZE; x++){
+      if (newGrid[y][x] !== grid[y][x]){
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
+
+// Beginning of hard mode code
 function displayGrid2(){
   // assigning each image to a grid
   for (let y = 0; y < GRIDSIZE2; y++){
@@ -460,28 +503,27 @@ function strokeLines2(){
 function checkGrid2(y, x){
   if (y+1 < GRIDSIZE2 && x < GRIDSIZE2 && newGrid2[y + 1][x] === 16){
     // to check if it should move down
-    
     newGrid2[y + 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
   }
+
   if (x+1 < GRIDSIZE2 && y < GRIDSIZE2 && newGrid2 [y][x + 1] === 16){
     // to check if it should move right
-    
     newGrid2 [y][x + 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
   }
+
   if (x-1 >= 0 && y >= 0 && newGrid2 [y][x - 1] === 16){
     // to check if it should move left
-    
     newGrid2[y][x - 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
   }
+
   if (y-1 >= 0 && x >= 0 && newGrid2 [y - 1][x] === 16){
     // to check if it should move up
-    
     newGrid2[y - 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
@@ -498,11 +540,11 @@ function shuffleImage2(){
   displayGrid2();
 }
 
-function arraysEqual(newGrid, grid){
+function arraysEqual2(newGrid2, grid2){
   // to check if the puzzle is completed or not
   for (let y = 0; y < GRIDSIZE; y++){
     for (let x = 0; x < GRIDSIZE; x++){
-      if (newGrid[y][x] !== grid[y][x]){
+      if (newGrid2[y][x] !== grid2[y][x]){
         return false;
       }
     }
