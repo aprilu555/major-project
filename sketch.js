@@ -35,7 +35,7 @@ let shuffle6, shuffle7, shuffle8;
 
 let clickSound;
 
-let hasWon = false;
+let confetti;
 
 function preload(){
   scenery = loadImage("assets/scenery.jpg");
@@ -67,6 +67,8 @@ function preload(){
   river15 = loadImage("assets/river15.jpg");
   river16 = loadImage("assets/river16.jpg");
 
+  confetti = loadImage("assets/confetti.png");
+
   shuffle1 = loadStrings("assets/1.txt"); 
   shuffle2 = loadStrings("assets/2.txt");
   shuffle3 = loadStrings("assets/3.txt"); 
@@ -79,6 +81,7 @@ function preload(){
 
   soundFormats("wav");
   clickSound = loadSound("clickSound.wav");
+
 }
 
 function setup() {
@@ -139,7 +142,6 @@ function setup() {
 function draw() {
   titlePage();
   switchScreens();
-  
 }
 
 function switchScreens(){ 
@@ -165,7 +167,9 @@ function switchScreens(){
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
     // text(highScore, windowWidth/2 + 150, windowHeight - 30);
     displayGrid();
-    arraysEqual();
+    if (arraysEqual(newGrid, grid) === true){
+      state = "endPage";
+    }
 
     if (key === "i"){
       state = "image";
@@ -232,8 +236,14 @@ function titlePage(){
 }
 
 function endPage(){
-  text("You finally did it!", windowWidth / 2, windowHeight / 2);
+  background(160, 210, 243);
+  noStroke();
   text("You did it!", windowWidth / 2, windowHeight / 2);
+  textSize(70);
+  textFont("fantasy");
+  text ("CONGRATS!", windowWidth / 2, windowHeight / 4);
+  image(confetti, 0, 0, windowWidth, windowHeight);
+  
 }
 
 function displayGrid(){
@@ -488,17 +498,14 @@ function shuffleImage2(){
   displayGrid2();
 }
 
-function arraysEqual(){
+function arraysEqual(newGrid, grid){
   // to check if the puzzle is completed or not
   for (let y = 0; y < GRIDSIZE; y++){
-    if (newGrid[y] !== grid[y]){
-      hasWon =  false;
-    }
     for (let x = 0; x < GRIDSIZE; x++){
-      if (newGrid[x] !== grid[x]){
-        hasWon = false;
+      if (newGrid[y][x] !== grid[y][x]){
+        return false;
       }
     }
   }
-  hasWon = true;
+  return true;
 }
