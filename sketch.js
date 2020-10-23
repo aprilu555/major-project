@@ -31,7 +31,7 @@ let moveCounter;
 let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
 
-let clickSound; // ADD?!?!
+let clickSound, endSound, errorSound;
 
 let confetti, mandala, mandala2, mandala3, mandala4, mandala5, mandala6;
 
@@ -45,7 +45,6 @@ function preload(){
   scenery6 = loadImage("assets/scenery6.jpg");
   scenery7 = loadImage("assets/scenery7.jpg");
   scenery8 = loadImage("assets/scenery8.jpg");
-  scenery9 = loadImage("assets/scenery9.jpg");
 
   river = loadImage("assets/river.jpg");
   river1 = loadImage("assets/river1.jpg");
@@ -63,7 +62,6 @@ function preload(){
   river13 = loadImage("assets/river13.jpg");
   river14 = loadImage("assets/river14.jpg");
   river15 = loadImage("assets/river15.jpg");
-  river16 = loadImage("assets/river16.jpg");
 
   confetti = loadImage("assets/confetti.png");
   mandala = loadImage("assets/mandala.png");
@@ -86,8 +84,9 @@ function preload(){
   shuffle8 = loadStrings("assets/8.txt");
 
   soundFormats("wav");
-  clickSound = loadSound("clickSound.wav");
-
+  clickSound = loadSound("assets/clickSound.wav");
+  endSound = loadSound("assets/endSound.wav");
+  errorSound = loadSound("assets/errorSound.wav");
 }
 
 function setup() {
@@ -168,12 +167,16 @@ function switchScreens(){
     image(mandala3, 0, 0);
     image(mandala4, windowWidth - mandala4.width, 0);
     tint(255, 255);
-    fill(0);
+    noStroke();
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
+    textSize(20);
+    text("hint: press 'i'", windowWidth/2 - 200, 60);
+    textSize(40);
     displayGrid();
     if (arraysEqual(newGrid, grid) === true){
       state = "endPage";
+      endSound.play();
     }
     if (key === "i"){
       state = "image";
@@ -187,12 +190,16 @@ function switchScreens(){
     image(mandala5, 0, 0);
     image(mandala6, windowWidth - mandala6.width, 0);
     tint(255, 255);
-    fill(0);
+    noStroke();
     text("moves:", windowWidth/2 - 50, windowHeight - 30);
     text(moveCounter, windowWidth/2 + 50, windowHeight - 30);
+    textSize(20);
+    text("hint: press 'i'", windowWidth/2 - 190, 80);
+    textSize(40);
     displayGrid2();
     if (arraysEqual2(newGrid2, grid2) === true){
       state = "endPage";
+      endSound.play();
     }
     if (key === "i"){
       state = "image2";
@@ -209,7 +216,7 @@ function switchScreens(){
     tint(255, 255);
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
-    fill(0);
+    noStroke();
     text("press 'e' to return to game", windowWidth / 2, windowHeight / 2 + 300);
     if (key === "e"){
       state = "game";
@@ -226,7 +233,7 @@ function switchScreens(){
     tint(255, 255);
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
-    fill(0);
+    noStroke();
     text("press 'h' to return to game", windowWidth / 2, windowHeight / 2 + 300);
     if (key === "h"){
       state = "game2";
@@ -260,7 +267,7 @@ function titlePage(){
   text("Press the 'e' key for Easy Mode", windowWidth / 2, windowHeight / 2);
   text("Press the 'h' key for Hard Mode", windowWidth / 2, windowHeight / 1.7);
   textSize(20);
-  text("In this game you will try to solve a puzzle, just click on the puzzle pieces beside the white square to move, in the end, the white square should be in the bottom right corner", windowWidth / 4, windowHeight / 2, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
+  text("In this game you will try to solve a puzzle, just click on the puzzle pieces beside the white square to move, in the end, the white square should be in the bottom right corner", windowWidth / 4, windowHeight / 2 - 30, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
   textSize(30);
   text("Hint: press 'i' in the middle of the game for help", windowWidth / 4, windowHeight / 2 + 50, windowWidth / 2 + 50, windowHeight / 1.5  - 50);
   textSize(40);
@@ -269,6 +276,7 @@ function titlePage(){
 function endPage(){
   background(160, 210, 243);
   tint(255, 200);
+  imageMode(CORNER);
   image(mandala, 0, 0);
   image(mandala2, windowWidth - mandala2.width, 0);
   tint(255, 255);
@@ -276,8 +284,10 @@ function endPage(){
   image(confetti, windowWidth / 2 - 300, windowHeight / 4, confetti.width * 0.5, confetti.height * 0.5);
   image(confetti, windowWidth / 2 + 300, windowHeight / 4, confetti.width * 0.5, confetti.height * 0.5);
   noStroke();
+  textFont("cursive");
+  textSize(40);
   text("You did it!", windowWidth / 2, windowHeight / 2);
-  text ("press 'r' to return to home page", windowWidth/2, windowHeight/ 2 - 100);
+  text ("Press 'r' to return to Home Page", windowWidth/2, windowHeight/ 2 + 100);
   textSize(70);
   textFont("fantasy");
   text ("CONGRATS!", windowWidth / 2, windowHeight / 4);
@@ -345,14 +355,12 @@ function mousePressed(){
     let x = floor(mouseX/cellSize -  lineX/cellSize);
     let y = floor(mouseY/cellSize - lineY/cellSize);
     checkGrid(y, x);
-    // clickSound.play();
   }
 
   else if (state === "game2"){
     let x = floor(mouseX/cellSize2 -  lineX2/cellSize2);
     let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
     checkGrid2(y, x);
-    // clickSound.play();
   }
 
   if (mouseX > lineX && mouseX < lineX + cellSize * 3 && mouseY > lineY  && mouseY < lineY + cellSize * 3){
@@ -365,7 +373,9 @@ function checkGrid(y, x){
     // to check if it should move down
     newGrid[y + 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
-    displayGrid(); //DO I NEED THIS?!?!!?
+    displayGrid(); 
+    clickSound.play();
+    return true;
   }
 
   if (x+1 < GRIDSIZE && y < GRIDSIZE && newGrid [y][x + 1] === 9){
@@ -373,6 +383,8 @@ function checkGrid(y, x){
     newGrid [y][x + 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
+    clickSound.play();
+    return true;
   }
 
   if (x-1 >= 0 && y >= 0 && newGrid [y][x - 1] === 9){
@@ -380,6 +392,8 @@ function checkGrid(y, x){
     newGrid[y][x - 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
+    clickSound.play();
+    return true;
   }
 
   if (y-1 >= 0 && x >= 0 && newGrid [y - 1][x] === 9){
@@ -387,12 +401,9 @@ function checkGrid(y, x){
     newGrid[y - 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
+    clickSound.play();
+    return true;
   } 
-
-  if (newGrid === grid){
-    newGrid = grid;
-    state = "endPage";
-  }
 }
 
 function shuffleImage(){
@@ -498,6 +509,7 @@ function strokeLines2(){
   line(4*cellSize2 + lineX2, lineY2, 4*cellSize2 + lineX2, 4*cellSize2 + lineY2);
   line(lineX2, lineY2, 4*cellSize2 +lineX2, lineY2);
   line(lineX2, 4*cellSize2 + lineY2, 4*cellSize2 +lineX2, 4*cellSize2 + lineY2);
+
 }
 
 function checkGrid2(y, x){
@@ -506,6 +518,7 @@ function checkGrid2(y, x){
     newGrid2[y + 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
+    clickSound.play();
   }
 
   if (x+1 < GRIDSIZE2 && y < GRIDSIZE2 && newGrid2 [y][x + 1] === 16){
@@ -513,6 +526,7 @@ function checkGrid2(y, x){
     newGrid2 [y][x + 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
+    clickSound.play();
   }
 
   if (x-1 >= 0 && y >= 0 && newGrid2 [y][x - 1] === 16){
@@ -520,6 +534,7 @@ function checkGrid2(y, x){
     newGrid2[y][x - 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
+    clickSound.play();
   }
 
   if (y-1 >= 0 && x >= 0 && newGrid2 [y - 1][x] === 16){
@@ -527,6 +542,7 @@ function checkGrid2(y, x){
     newGrid2[y - 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
+    clickSound.play();
   } 
 }
 
@@ -542,8 +558,8 @@ function shuffleImage2(){
 
 function arraysEqual2(newGrid2, grid2){
   // to check if the puzzle is completed or not
-  for (let y = 0; y < GRIDSIZE; y++){
-    for (let x = 0; x < GRIDSIZE; x++){
+  for (let y = GRIDSIZE; y >= 0; y--){
+    for (let x = GRIDSIZE; x >= 0; x--){
       if (newGrid2[y][x] !== grid2[y][x]){
         return false;
       }
