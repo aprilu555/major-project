@@ -2,8 +2,6 @@
 // April Lu
 // October 14th, 2020
 
-// try to add sound? add comments
-
 const GRIDSIZE = 3;
 let lineY, lineX;
 let state = "titleScreen";
@@ -21,7 +19,6 @@ let grid2 = [[1,2,3,4],
   [5, 6, 7, 8],
   [9, 10,  11, 12],
   [13, 14, 15, 16]];
-
 let newGrid2 = [];
 let river, river1, river2, river3, river4, river5, river6, river7, river8, river9, river10, river11, river12, river13, river14, river15, river16;
 
@@ -31,7 +28,7 @@ let moveCounter;
 let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
 
-let clickSound, endSound, errorSound;
+let clickSound, endSound;
 
 let confetti, mandala, mandala2, mandala3, mandala4, mandala5, mandala6;
 
@@ -86,7 +83,6 @@ function preload(){
   soundFormats("wav");
   clickSound = loadSound("assets/clickSound.wav");
   endSound = loadSound("assets/endSound.wav");
-  errorSound = loadSound("assets/errorSound.wav");
 }
 
 function setup() {
@@ -224,7 +220,7 @@ function switchScreens(){
   }
 
   else if (state === "image2"){
-    // referencec image for the 4x4 grid
+    // reference image for the 4x4 grid
     background(160, 210, 243);
     imageMode(CORNER);
     tint(255, 200);
