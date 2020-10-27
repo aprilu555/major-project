@@ -2,31 +2,39 @@
 // April Lu
 // October 14th, 2020
 
+// I spent quite a bit time making my game look nice by adding images to the background 
+// and centering the grid(which took me a long time). I also added an end page once the puzzle has been completed. 
+// One thing I spent a lot of time on was fixing my grid so that everytime it shuffles it's solveable. 
+// I first went online and found other puzzle sliding games where I took their image order and put it in a text file
+// loacated in my assets. I made 8 text files in total. Everytime the grid shuffles, it takes a random text file from the 
+// assets and sets that as my 2d array values. This ensures that everytime the grid shuffles, it is solveable. 
+
+let state = "titleScreen";
+
+// variables for 3x3 grid
 const GRIDSIZE = 3;
 let lineY, lineX;
-let state = "titleScreen";
 let cellSize;
-let cellSize2;
 let grid = [[1,2,3],
   [4,5,6],
   [7,8,9]];
 let newGrid = [];
 let scenery, scenery1, scenery2, scenery3, scenery4, scenery5, scenery6, scenery7, scenery8, scenery9;
+let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 
+// variables for 4x4 grid
 const GRIDSIZE2 = 4;
 let lineY2, lineX2;
+let cellSize2;
 let grid2 = [[1,2,3,4],
   [5, 6, 7, 8],
   [9, 10,  11, 12],
   [13, 14, 15, 16]];
 let newGrid2 = [];
 let river, river1, river2, river3, river4, river5, river6, river7, river8, river9, river10, river11, river12, river13, river14, river15, river16;
-
-let shouldMove = false;
-let moveCounter;
-
-let shuffle1, shuffle2, shuffle3, shuffle4, shuffle5;
 let shuffle6, shuffle7, shuffle8;
+
+let moveCounter;
 
 let clickSound, endSound;
 
@@ -213,7 +221,7 @@ function switchScreens(){
     imageMode(CENTER,CENTER);
     image(scenery, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
     noStroke();
-    text("press 'e' to return to game", windowWidth / 2, windowHeight / 2 + 300);
+    text("press 'e' to return to game", windowWidth / 2, windowHeight - 50);
     if (key === "e"){
       state = "game";
     }
@@ -230,14 +238,14 @@ function switchScreens(){
     imageMode(CENTER,CENTER);
     image(river, windowWidth/2, windowHeight/2, cellSize *2.5, cellSize * 2.5);
     noStroke();
-    text("press 'h' to return to game", windowWidth / 2, windowHeight / 2 + 300);
+    text("press 'h' to return to game", windowWidth / 2, windowHeight - 50);
     if (key === "h"){
       state = "game2";
     }
   }
 
   else if (state === "endPage"){
-    // final page of the game after the puzzle has been completed, give an option to restart
+    // final page of the game after the puzzle has been completed, gives an option to restart
     endPage();
     if (key === "r"){
       state = "titleScreen";
@@ -348,12 +356,14 @@ function strokeLines(){
 
 function mousePressed(){
   if (state === "game"){
+    // check mouse position for 3x3 grid
     let x = floor(mouseX/cellSize -  lineX/cellSize);
     let y = floor(mouseY/cellSize - lineY/cellSize);
     checkGrid(y, x);
   }
 
   else if (state === "game2"){
+    // check mouse position for 4x4 grid
     let x = floor(mouseX/cellSize2 -  lineX2/cellSize2);
     let y = floor(mouseY/cellSize2 - lineY2/cellSize2);
     checkGrid2(y, x);
@@ -366,7 +376,7 @@ function mousePressed(){
 
 function checkGrid(y, x){
   if (y+1 < GRIDSIZE && x < GRIDSIZE && newGrid[y + 1][x] === 9 ){
-    // to check if it should move down
+    // to check if image should move down
     newGrid[y + 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid(); 
@@ -375,7 +385,7 @@ function checkGrid(y, x){
   }
 
   if (x+1 < GRIDSIZE && y < GRIDSIZE && newGrid [y][x + 1] === 9){
-    // to check if it should move right
+    // to check if image should move right
     newGrid [y][x + 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
@@ -384,7 +394,7 @@ function checkGrid(y, x){
   }
 
   if (x-1 >= 0 && y >= 0 && newGrid [y][x - 1] === 9){
-    // to check if it should move left
+    // to check if image should move left
     newGrid[y][x - 1] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
@@ -393,7 +403,7 @@ function checkGrid(y, x){
   }
 
   if (y-1 >= 0 && x >= 0 && newGrid [y - 1][x] === 9){
-    // to check if it should move up
+    // to check if image should move up
     newGrid[y - 1][x] = newGrid[y][x];
     newGrid[y][x] = 9;
     displayGrid();
@@ -510,7 +520,7 @@ function strokeLines2(){
 
 function checkGrid2(y, x){
   if (y+1 < GRIDSIZE2 && x < GRIDSIZE2 && newGrid2[y + 1][x] === 16){
-    // to check if it should move down
+    // to check if image should move down
     newGrid2[y + 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
@@ -518,7 +528,7 @@ function checkGrid2(y, x){
   }
 
   if (x+1 < GRIDSIZE2 && y < GRIDSIZE2 && newGrid2 [y][x + 1] === 16){
-    // to check if it should move right
+    // to check if image should move right
     newGrid2 [y][x + 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
@@ -526,7 +536,7 @@ function checkGrid2(y, x){
   }
 
   if (x-1 >= 0 && y >= 0 && newGrid2 [y][x - 1] === 16){
-    // to check if it should move left
+    // to check if image should move left
     newGrid2[y][x - 1] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
@@ -534,7 +544,7 @@ function checkGrid2(y, x){
   }
 
   if (y-1 >= 0 && x >= 0 && newGrid2 [y - 1][x] === 16){
-    // to check if it should move up
+    // to check if image should move up
     newGrid2[y - 1][x] = newGrid2[y][x];
     newGrid2[y][x] = 16;
     displayGrid2();
@@ -543,7 +553,7 @@ function checkGrid2(y, x){
 }
 
 function shuffleImage2(){
-  // to randomize the grid (easy mode)
+  // to randomize the grid (hard mode)
   for (let y = 0; y < GRIDSIZE2; y ++){
     for (let x = 0; x < GRIDSIZE2; x++){
       newGrid2 = random([shuffle6, shuffle7, shuffle8]);
